@@ -27,8 +27,8 @@ def getSignal(shortSma,longSma,priceSeries):
     shortSmaCol=f'sma_{shortSma}'
     longSmaCol=f'_sma_{longSma}'
     
-    df[shortSmaCol]=df[rootCol].rolling(shortSma).mean()
-    df[longSmaCol]=df[rootCol].rolling(longSma).mean()
+    df[shortSmaCol]=df[rootCol].rolling(int(shortSma)).mean()
+    df[longSmaCol]=df[rootCol].rolling(int(longSma)).mean()
     
     longSmaColBefore=f'{longSmaCol}_before'
     shortSmaColBefore=f'{shortSmaCol}_before'

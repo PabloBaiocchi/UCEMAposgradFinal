@@ -21,8 +21,8 @@ def rawToDf(raw):
     return df
 
 def getData(alphavantageApiKey):
-    btcRaw=getData('BTC',alphavantageApiKey)
-    ethRaw=getData('ETH',alphavantageApiKey)
+    btcRaw=getRawData('BTC',alphavantageApiKey)
+    ethRaw=getRawData('ETH',alphavantageApiKey)
 
     ethDf=rawToDf(ethRaw)
     btcDf=rawToDf(btcRaw)

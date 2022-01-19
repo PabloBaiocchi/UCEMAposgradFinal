@@ -31,3 +31,7 @@ def getData(alphavantageApiKey):
     df['btc_eth']=df.price_btc/df.price_eth
     df.sort_values('date',inplace=True)
     return df
+
+def storeData(filePath,alphavantageApiKey):
+    data=getData(alphavantageApiKey)
+    data.to_csv(filePath)

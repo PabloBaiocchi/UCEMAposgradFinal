@@ -122,3 +122,17 @@ def summarizeTraining(results,priceDf):
     summary=pd.DataFrame(summaries)
     summary['sharpe']=summary.annualized_return/summary.annualized_volatility
     return summary
+
+def getBenchmark(dates,priceDf):
+    benchmarkDf=dates.to_frame()
+    eth,btc=getInitialPosition(priceDf[priceDf.date==dates.min()],100000)
+    benchmarkDf['btc']=np.ones(len(benchmarkDf))*btc
+    benchmarkDf['eth']=np.ones(len(benchmarkDf))*eth
+    benchmark={
+    'shortSma':0,
+    'longSma':0,
+    'percentShort':0,
+    'resultFrame':benchmarkDf
+    }
+    benchmarkSummary=summarizeIteration(benchmark,priceDf)
+    return benchmark

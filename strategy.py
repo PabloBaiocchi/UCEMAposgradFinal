@@ -2,7 +2,7 @@ import scipy.stats as sciStats
 import itertools as it
 import pandas as pd
 import numpy as np
-import datetime as dt
+from durationTracker import DurationTracker
 
 def error(sigma,n,p):
     return sciStats.t.ppf(1-p,n-1)*sigma/n**.5
@@ -126,21 +126,11 @@ def strategy(pSeries,trainingSize,shortRange,longRange,upperPRange,lowerPRange):
 
 def run(data,trainingSize,shortRange,longRange,upperPRange,lowerPRange):
     rows=[]
-    colAmount=len(data.columns)
-    startTime=dt.datetime.now()
-    lastStart=startTime
+    dt=DurationTracker(len(data.columns))
+    dt.start()
     for i,ticker in enumerate(data.columns):
         results=strategy(data[ticker],trainingSize,shortRange,longRange,upperPRange,lowerPRange)
         results['ticker']=ticker
         rows.append(results)
-        lastStart=durationPrint(i,colAmount,ticker,startTime,lastStart)
+        dt.update(i,ticker)
     return pd.DataFrame(rows)
-
-def durationPrint(i,colAmount,ticker,startTime,lastStart):
-    now=dt.datetime.now()
-    roundDuration=(now-lastStart).seconds
-    print(f'{i+1}/{colAmount}: {ticker}')
-    print(f'\tduration: {roundDuration} seconds')
-    print(f'\ttotal duration: {(now-startTime).seconds/60} minutes')
-    print(f'\testimated time remaining: {(colAmount-1-i)*roundDuration/60} minutes')
-    return now

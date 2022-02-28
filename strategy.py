@@ -96,10 +96,16 @@ def train(trainingSet,buySellSignals):
         'signal':winner.signal
     }
 
+def mergeSignals(lowerSignals,upperSignals):
+    return [buySellSignal(lower,upper) for lower,upper in it.product(lowerSignals,upperSignals)]
+
+def getBuySellSignals(returns,shortRange,longRange,upperPRange,lowerPRange):
+    lowerSignals, upperSignals=getSignals(returns,shortRange,longRange,upperPRange,lowerPRange)
+    return mergeSignals(lowerSignals,upperSignals)
+
 def strategy(pSeries,trainingSize,shortRange,longRange,upperPRange,lowerPRange):
     returns=pSeries.pct_change()
-    lowerSignals, upperSignals=getSignals(returns,shortRange,longRange,upperPRange,lowerPRange)
-    buySellSignals=[buySellSignal(lower,upper) for lower,upper in it.product(lowerSignals,upperSignals)]
+    buySellSignals=getBuySellSignals(returns,shortRange,longRange,upperPRange,lowerPRange)
     
     trainingCutoff=int(len(pSeries)*trainingSize)
     trainingSet=returns[:trainingCutoff]
